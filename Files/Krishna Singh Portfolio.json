@@ -1,0 +1,87 @@
+{
+  "name": "Krishna Singh",
+  "title": "Full Stack Software Engineer",
+  "bio": "Sophomore Engineering student skilled in Full-Stack Development for Web and Mobile Platforms using React and React Native. Specialized in integrating AI functionalities directly into applications to build smarter, more responsive user experiences.",
+  "portfolioUrl": "https://krishnasingh.live",
+  "socials": {
+    "GitHub": "https://github.com/krishnasinghprojects",
+    "LinkedIn": "https://www.linkedin.com/in/krishnasinghprojects",
+    "X": "https://x.com/krishnasingh_28",
+    "Instagram": "https://www.instagram.com/krishnasinghprojects",
+    "Discord": "https://discordapp.com/users/1351651268761882644"
+  },
+  "skills": {
+    "Programming Languages": ["JavaScript", "TypeScript", "Python", "C", "Java", "Kotlin", "C++"],
+    "Full Stack Development": ["HTML", "CSS", "React", "Next.js", "Tailwind CSS", "Node.js", "Express.js", "MongoDB", "React Native", "Expo"],
+    "AI Integrations": ["Gemini SDK", "ChatGPT SDK", "Ollama SDK", "Fine Tuning", "RAG", "MCP"],
+    "Cloud & DevOps": ["Firebase", "AWS (EC2, Lambda, S3, IAM)", "Docker"],
+    "Tools": ["Git", "GitHub", "Postman", "Vite", "Canva", "FastAPI", "Streamlit"]
+  },
+  "projects": [
+    {
+      "name": "Academic Archive",
+      "description": "A dynamic digital library that organizes and displays academic files directly from GitHub using a JSON-driven architecture with folder pinning, dark mode, and PDF/image/code viewers.",
+      "tech": ["HTML", "CSS", "JavaScript"],
+      "url": "https://archive.krishnasingh.live"
+    },
+    {
+      "name": "Academic Notes",
+      "description": "An AI-powered MERN application that generates structured notes, quizzes, and analyses from PDFs, audio, and handwritten inputs using Gemini API.",
+      "tech": ["React", "Vite", "Node.js", "Express.js", "Gemini SDK"],
+      "url": "https://notes.krishnasingh.live"
+    },
+    {
+      "name": "Ecosync Nexus",
+      "description": "A full-stack IoT smart home ecosystem featuring ESP32 firmware, Node.js backend, and a React Native app for energy management and AI-powered automation.",
+      "tech": ["Node.js", "Express.js", "React Native", "C++", "Gemini SDK"],
+      "url": "https://youtu.be/dw1rLopQCcU"
+    },
+    {
+      "name": "Portfolio Forge",
+      "description": "A headless CMS and portfolio management system with a React + Firebase admin panel and a vanilla JS public frontend.",
+      "tech": ["React", "Firebase", "Gemini API", "Vite"],
+      "url": "https://krishnasingh.live"
+    }
+  ],
+  "education": [
+    {
+      "institution": "Babu Banarasi Das University",
+      "degree": "Bachelor of Technology",
+      "period": "2024–2028"
+    },
+    {
+      "institution": "City Convent School",
+      "degree": "Intermediate (12th)",
+      "period": "2022–2024",
+      "percentage": 91.4
+    },
+    {
+      "institution": "City Convent School",
+      "degree": "High School (10th)",
+      "period": "2020–2022",
+      "percentage": 90.4
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Front End Battle 2.0 - National Finalist",
+      "link": "https://ik.imagekit.io/krishnasingh/Certificates/Hackathons/1.jpeg"
+    },
+    {
+      "name": "Sustainovation 2025 - National Finalist",
+      "link": "https://ik.imagekit.io/krishnasingh/Certificates/Hackathons/4.jpg"
+    },
+    {
+      "name": "Hackorbit - National Finalist",
+      "link": "https://ik.imagekit.io/krishnasingh/Certificates/Hackathons/6.jpeg"
+    },
+    {
+      "name": "Bhartiya Antariksh Ideathon",
+      "link": "https://ik.imagekit.io/krishnasingh/Certificates/Skills/12.jpeg"
+    },
+    {
+      "name": "Generative A.I. Academy",
+      "link": "https://ik.imagekit.io/krishnasingh/Certificates/Skills/10.jpg"
+    }
+  ]
+}

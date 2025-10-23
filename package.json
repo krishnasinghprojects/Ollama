@@ -1,0 +1,16 @@
+{
+  "name": "ai-file-manager",
+  "version": "1.0.0",
+  "description": "AI-powered file manager using Ollama vision model",
+  "type": "module",
+  "main": "fileManager.js",
+  "scripts": {
+    "start": "node fileManager.js",
+    "basic": "node index.js"
+  },
+  "dependencies": {
+    "fs-extra": "^11.3.2",
+    "ollama": "^0.6.0",
+    "prompt-sync": "^4.2.0"
+  }
+}

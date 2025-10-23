@@ -1,0 +1,230 @@
+import { Ollama } from 'ollama';
+import fs from 'fs-extra';
+import path from 'path';
+import promptSync from 'prompt-sync';
+
+// Setup prompt for terminal input
+const prompt = promptSync({ sigint: true });
+
+// Establish connection to Ollama
+const ollama = new Ollama({ host: 'http://localhost:11434' });
+
+// Store conversation history
+let conversationHistory = [];
+
+// Files directory
+const FILES_DIR = './Files';
+
+// List all files in the Files folder
+async function listFiles() {
+    try {
+        const files = await fs.readdir(FILES_DIR);
+        console.log('\nFiles in folder:');
+        files.forEach((file, index) => {
+            console.log(`${index + 1}. ${file}`);
+        });
+        return files;
+    } catch (error) {
+        console.log('Error listing files:', error.message);
+        return [];
+    }
+}
+
+// Read different types of files
+async function readFile(fileName) {
+    try {
+        const filePath = path.join(FILES_DIR, fileName);
+
+        if (!await fs.pathExists(filePath)) {
+            console.log(`File "${fileName}" not found`);
+            return null;
+        }
+
+        const extension = path.extname(fileName).toLowerCase();
+        console.log(`Reading ${fileName}...`);
+
+        let content = null;
+            // Read as text (txt, json, etc.)
+            content = await fs.readFile(filePath, 'utf-8');
+            return { fileName, type: 'text', content };
+
+
+    } catch (error) {
+        console.log(`Error reading ${fileName}:`, error.message);
+        return null;
+    }
+}
+
+// Define tools for the AI
+const tools = [
+    {
+        type: 'function',
+        function: {
+            name: 'list_files',
+            description: 'List all files in the Files folder',
+            parameters: {
+                type: 'object',
+                properties: {},
+                required: []
+            }
+        }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'read_file',
+            description: 'Read a specific file from the Files folder',
+            parameters: {
+                type: 'object',
+                properties: {
+                    fileName: {
+                        type: 'string',
+                        description: 'Name of the file to read'
+                    }
+                },
+                required: ['fileName']
+            }
+        }
+    }
+];
+
+// Execute tool functions
+async function executeTool(toolCall) {
+    const { name, arguments: args } = toolCall.function;
+
+    if (name === 'list_files') {
+        const files = await listFiles();
+        return files;
+    }
+    else if (name === 'read_file') {
+        const fileData = await readFile(args.fileName);
+        if (fileData && fileData.content) {
+            return fileData.content;
+        }
+        return 'Could not read file';
+    }
+
+    return 'Unknown tool';
+}
+
+// Chat with AI
+async function chatWithAI(userMessage) {
+    try {
+        // Add user message to history
+        conversationHistory.push({ role: 'user', content: userMessage });
+
+        // System prompt
+        const systemPrompt = `You are a helpful file management assistant. You have access to tools that can read files from a Files folder.
+
+AVAILABLE TOOLS:
+1. list_files() - Shows all available files
+2. read_file(fileName) - Reads and returns the content of any file
+
+CRITICAL INSTRUCTIONS:
+- When users ask about files or specific people/documents, ALWAYS use your tools
+- First use list_files() to see what's available
+- Then use read_file() to access the specific file content
+- You can read JSON files and text files
+- Always provide detailed information based on the actual file content
+- Never say you cannot access files - you have tools to read them
+
+WORKFLOW:
+1. User asks about files → Use list_files()
+2. User asks about specific file → Use read_file(fileName)
+3. Analyze the content and provide comprehensive answers
+
+Be direct and helpful. Always use your tools when file-related questions are asked.`;
+
+        // Prepare messages
+        const messages = [
+            { role: 'system', content: systemPrompt },
+            ...conversationHistory
+        ];
+
+        // Send to AI with tools
+        const response = await ollama.chat({
+            model: 'gpt-oss:20b',
+            messages: messages,
+            tools: tools,
+        });
+
+        let aiResponse = response.message.content;
+
+        // Handle tool calls
+        if (response.message.tool_calls && response.message.tool_calls.length > 0) {
+
+            // Add AI message with tool calls to history
+            conversationHistory.push({
+                role: 'assistant',
+                content: aiResponse,
+                tool_calls: response.message.tool_calls
+            });
+
+            // Execute each tool
+            for (const toolCall of response.message.tool_calls) {
+                const toolResult = await executeTool(toolCall);
+                
+                // Add tool result to history
+                conversationHistory.push({
+                    role: 'tool',
+                    content: JSON.stringify(toolResult),
+                    tool_call_id: toolCall.id
+                });
+            }
+
+            // Get final response from AI
+            const finalMessages = [
+                { role: 'system', content: systemPrompt },
+                ...conversationHistory
+            ];
+
+            const finalResponse = await ollama.chat({
+                model: 'gpt-oss:20b',
+                messages: finalMessages,
+            });
+
+            aiResponse = finalResponse.message.content;
+        }
+
+        // Add AI response to history
+        conversationHistory.push({ role: 'assistant', content: aiResponse });
+
+        return aiResponse;
+
+    } catch (error) {
+        console.log('Error chatting with AI:', error.message);
+        return 'Sorry, I had trouble processing that.';
+    }
+}
+
+// Main chat loop
+async function main() {
+    console.log('AI File Manager Chat');
+    console.log('Type "exit" to quit or "clear" to clear history');
+    console.log('Ask me about files and I will automatically access them for you!');
+    console.log('');
+
+    while (true) {
+        // Get user input
+        const userInput = prompt('You: ');
+
+        // Handle special commands
+        if (userInput.toLowerCase() === 'exit') {
+            console.log('Goodbye!');
+            break;
+        }
+
+        if (userInput.toLowerCase() === 'clear') {
+            conversationHistory = [];
+            console.log('Chat history cleared');
+            continue;
+        }
+
+        // Chat with AI - it will automatically use tools as needed
+        const response = await chatWithAI(userInput);
+        console.log(`\nAI: ${response}\n`);
+    }
+}
+
+// Start the chat
+main();
