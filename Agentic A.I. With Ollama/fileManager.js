@@ -124,9 +124,9 @@ CRITICAL INSTRUCTIONS:
 - When users ask about files or specific people/documents, ALWAYS use your tools
 - First use list_files() to see what's available
 - Then use read_file() to access the specific file content
-- You can read JSON files and text files
+- You can read JSON files,csv files and text files
 - Always provide detailed information based on the actual file content
-- Never say you cannot access files - you have tools to read them
+- Never say you cannot access files, you have tools to read them
 
 WORKFLOW:
 1. User asks about files → Use list_files()

@@ -14,7 +14,7 @@ async function main() {
 
   // 2. Send the prompt to the AI model and wait for the answer
   const response = await ollama.chat({
-    model: 'qwen2.5vl:7b',
+    model: 'gemma3',
     messages: [{ role: 'user', content: userPrompt }],
   });
 
