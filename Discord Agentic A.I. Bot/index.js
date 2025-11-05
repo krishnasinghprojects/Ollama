@@ -1,10 +1,11 @@
 import { Ollama } from 'ollama';
 import fs from 'fs-extra';
 import path from 'path';
-import promptSync from 'prompt-sync';
+import { fileURLToPath } from 'url';
 
-// Setup prompt for terminal input
-const prompt = promptSync({ sigint: true });
+// Get the directory of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Establish connection to Ollama
 const ollama = new Ollama({ host: 'http://localhost:11434' });
@@ -12,12 +13,15 @@ const ollama = new Ollama({ host: 'http://localhost:11434' });
 // Store conversation history
 let conversationHistory = [];
 
-// Files directory
-const FILES_DIR = './Files';
+// Files directory - use absolute path
+const FILES_DIR = path.join(__dirname, 'Files');
 
 // List all files in the Files folder
 async function listFiles() {
     try {
+        // Ensure the Files directory exists
+        await fs.ensureDir(FILES_DIR);
+        
         const files = await fs.readdir(FILES_DIR);
         console.log('\nFiles in folder:');
         files.forEach((file, index) => {
@@ -54,7 +58,6 @@ async function readFile(fileName) {
         return null;
     }
 }
-
 // Define tools for the AI
 const tools = [
     {

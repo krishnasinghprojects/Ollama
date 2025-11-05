@@ -11,7 +11,7 @@ const client = new Client({
 });
 
 // When the client is ready, run this code
-client.once('ready', () => {
+client.once('clientReady', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
@@ -42,4 +42,4 @@ client.on('messageCreate', async (message) => {
 });
 
 // Login to Discord with your bot token
-client.login("YOUR_KEY_HERE");
+client.login("BOT_KEY_HERE");

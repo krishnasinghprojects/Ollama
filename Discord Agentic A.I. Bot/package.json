@@ -1,6 +1,9 @@
 {
   "type": "module",
   "dependencies": {
-    "discord.js": "^14.24.2"
+    "discord.js": "^14.24.2",
+    "fs-extra": "^11.3.2",
+    "ollama": "^0.6.0",
+    "prompt-sync": "^4.2.0"
   }
 }
