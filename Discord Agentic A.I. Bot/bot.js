@@ -1,5 +1,5 @@
 import { Client, GatewayIntentBits } from 'discord.js';
-import { chatWithAI } from './index.js';
+import { chatWithAI } from './fileManager.js';
 
 // Create a new client instance
 const client = new Client({
